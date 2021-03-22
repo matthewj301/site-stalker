@@ -14,7 +14,7 @@ class SiteStalker:
         else:
             self.content_dir = self.root_dir.joinpath('content')
         self.config = yaml.safe_load(config_file.open())
-        self.monitor_dict = {k: v for (k, v) in self.config.items()}
+        self.monitor_dict = {k: v for (k, v) in self.config['sites'].items()}
         self.headers = {
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36',
             'Pragma': 'no-cache', 'Cache-Control': 'no-cache'
