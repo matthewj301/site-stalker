@@ -1,2 +1,11 @@
+general:
+  check_interval: <interval between checks in seconds>
+
 sites:
   your_monitor_site_alias: 'url_to_monitor'
+
+  twilio:
+    twilio_phone_number: +1<your_number_here>
+    user_phone_number: +1<your_number_here>
+    account_sid: <account_sid_here>
+    auth_token: <auth_token_here>

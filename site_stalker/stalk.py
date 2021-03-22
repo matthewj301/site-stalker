@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import requests
 from pathlib import Path
 import yaml
@@ -7,13 +6,13 @@ from bs4 import BeautifulSoup
 
 
 class SiteStalker:
-    def __init__(self, config_file, content_dir=None):
+    def __init__(self, config, content_dir=None):
         self.root_dir = Path(__file__).resolve().parent.parent
         if content_dir:
             self.content_dir = Path(content_dir)
         else:
             self.content_dir = self.root_dir.joinpath('content')
-        self.config = yaml.safe_load(config_file.open())
+        self.config = config
         self.monitor_dict = {k: v for (k, v) in self.config['sites'].items()}
         self.headers = {
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36',
@@ -65,17 +64,17 @@ class SiteStalker:
                 site_file_writer.write(processed_site_html)
             self._log('info', 'action=check_if_site_file_exists event=site_file_does_not_exist '
                               'action=creating_site_file_and_returning_false')
-            return False
+            return {'site_alias': site_alias, 'changed': False}
 
         with open(site_content_file) as site_file_reader:
             previous_response_html = site_file_reader.read()
 
         if processed_site_html == previous_response_html:
             self._log('info', f'action=compare_current_and_previous_sites event=sites_match site_alias={site_alias}')
-            return False
+            return {'site_alias': site_alias, 'changed': False}
         else:
             self._log('success', f'action=compare_current_and_previous_sites event=sites_do_not_match'
                               f' site_alias={site_alias}')
             with open(site_content_file, 'w') as site_file_writer:
                 site_file_writer.write(processed_site_html)
-            return True
+            return {'site_alias': site_alias, 'changed': True}
