@@ -133,3 +133,6 @@ dmypy.json
 
 #configs
 *.cfg
+
+# content files
+content/*.html
