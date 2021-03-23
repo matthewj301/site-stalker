@@ -136,3 +136,6 @@ dmypy.json
 
 # content files
 content/*.html
+
+# jetbrains
+# .idea/
