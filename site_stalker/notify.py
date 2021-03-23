@@ -1,4 +1,3 @@
-import yaml
 from twilio.rest import Client
 
 
@@ -28,7 +27,7 @@ class Notifier:
                                body=txt)
 
     def format_notification(self, _site):
-        formatted_msg =  f'The site {_site} changed from last check. URL: {self.config["sites"][_site]}'
+        formatted_msg = f'The site {_site} changed from last check. URL: {self.config["sites"][_site]}'
         return formatted_msg
 
     def notify_user_of_site_change(self, _site):

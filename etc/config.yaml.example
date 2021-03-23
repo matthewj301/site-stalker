@@ -1,5 +1,7 @@
 general:
   check_interval: <interval between checks in seconds>
+  log_level: <log level> OPTIONAL
+  log_dir: <a dir to log to> OPTIONAL (Make sure the running user has access to write to this dir if you set one)
 
 sites:
   your_monitor_site_alias: 'url_to_monitor'

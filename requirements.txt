@@ -1,0 +1,9 @@
+loguru~=0.5.3
+bs4
+pyyaml~=5.4.1
+
+requests==2.25.1
+beautifulsoup4~=4.9.3
+twilio~=6.54.0
+
+lxml

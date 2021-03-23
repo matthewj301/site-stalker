@@ -1,12 +1,13 @@
-#!/usr/bin/env python3
-from site_stalker.stalk import SiteStalker
-from site_stalker.notify import Notifier
-from loguru import logger
-from pathlib import Path
+#!/usr/bin/env python
 import sys
 import time
-import yaml
+from pathlib import Path
 
+import yaml
+from loguru import logger
+
+from site_stalker.notify import Notifier
+from site_stalker.stalk import SiteStalker
 
 root_dir = Path(__file__).resolve().parent.parent
 config_dir = root_dir.joinpath('etc')
@@ -17,6 +18,19 @@ if not config_file.exists():
     sys.exit()
 
 config = yaml.safe_load(config_file.open())
+general_config_dict = {k: v for (k, v) in config['general'].items()}
+
+log_level = 'INFO'
+log_file = root_dir.joinpath('site_stalker.log')
+
+if 'log_level' in general_config_dict:
+    log_level = general_config_dict['log_level'].upper()
+if 'log_dir' in general_config_dict:
+    log_file = Path(general_config_dict['log_dir']).joinpath('site_stalker.log')
+
+logger.remove()
+logger.add(log_file, level=log_level, rotation='100 MB', retention='1 week', backtrace=True)
+
 
 check_interval = config['general']['check_interval']
 s_stalker = SiteStalker(config)

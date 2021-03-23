@@ -1,8 +1,8 @@
-import requests
 from pathlib import Path
-import yaml
-from loguru import logger
+
+import requests
 from bs4 import BeautifulSoup
+from loguru import logger
 
 
 class SiteStalker:
@@ -74,7 +74,7 @@ class SiteStalker:
             return {'site_alias': site_alias, 'changed': False}
         else:
             self._log('success', f'action=compare_current_and_previous_sites event=sites_do_not_match'
-                              f' site_alias={site_alias}')
+                                 f' site_alias={site_alias}')
             with open(site_content_file, 'w') as site_file_writer:
                 site_file_writer.write(processed_site_html)
             return {'site_alias': site_alias, 'changed': True}
