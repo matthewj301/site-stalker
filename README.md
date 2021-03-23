@@ -28,3 +28,9 @@ Note on running this: Podman or Docker should allow you to run this on any OS, b
    - Your phone number
    - check_interval, which is the amount of time between checking if a site has changed in seconds
     - Be careful of setting this too low, a site may block your IP if you make too many of the same requests in a period of time
+
+### Running The Project
+1. On the commandline in the site-stalker directory, run the following command: podman build -t sitestalker-prod . && podman run --name sitestalker --rm --net=host sitestalker-prod:latest
+ - This will build the container image and start it up
+2. To stop the container run: podman container stop sitestalker
+3. To update your config, adjust what you need to in config.yaml, stop the container (bulletpoint 2), then run bulletpoint 1 again
