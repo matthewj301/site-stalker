@@ -1,9 +1,11 @@
 # site_stalker
 
-Project to monitor and alert on a website changing between pulls
+Project to monitor and alert on a website changing between pulls. Also now a covid-19 vaccine appointment notifier. 
 
 Original idea
 from: https://medium.com/swlh/tutorial-creating-a-webpage-monitor-using-python-and-running-it-on-a-raspberry-pi-df763c142dac
+
+Vaccine Appointment Info from this project's API: https://github.com/GUI/covid-vaccine-spotter 
 
 Note on Twilio: it's free to send yourself text messages, but you will be charged for sending texts to other numbers not
 registered to your account.
@@ -27,7 +29,8 @@ Note on running this: Podman or Docker should allow you to run this on any OS, b
    - Twilio information you saved above including the Twilio-generated phone number
    - Your phone number
    - check_interval, which is the amount of time between checking if a site has changed in seconds
-    - Be careful of setting this too low, a site may block your IP if you make too many of the same requests in a period of time
+   - Be careful of setting this too low, a site may block your IP if you make too many of the same requests in a period of time
+   - other fields relating to enabling or disabling certain features or honing in on apts by zipcode instead of city
 
 ### Running The Project
 1. On the commandline in the site-stalker directory, run the following command: podman build -t sitestalker-prod . && podman run --name sitestalker --rm --net=host sitestalker-prod:latest

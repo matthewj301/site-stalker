@@ -8,6 +8,7 @@ from loguru import logger
 
 from site_stalker.notify import Notifier
 from site_stalker.stalk import SiteStalker
+from site_stalker.vaccine_spotter import VaccineSpotter
 
 root_dir = Path(__file__).resolve().parent.parent
 config_dir = root_dir.joinpath('etc')
@@ -28,19 +29,26 @@ if 'log_level' in general_config_dict:
 if 'log_dir' in general_config_dict:
     log_file = Path(general_config_dict['log_dir']).joinpath('site_stalker.log')
 
-logger.remove()
+#logger.remove()
 logger.add(log_file, level=log_level, rotation='100 MB', retention='1 week', backtrace=True)
 
 
 check_interval = config['general']['check_interval']
+
 s_stalker = SiteStalker(config)
 s_notifier = Notifier(config)
+v_finder = VaccineSpotter(config)
 
 logger.info('audit=site_stalker action=starting_up event=successfully_loaded_classes')
 
 while True:
-    for _site in s_stalker.compare_websites():
-        if _site['changed'] is True:
-            s_notifier.notify_user_of_site_change(_site['site_alias'])
-    logger.info(f'audit=site_stalker action=waiting event=still_waiting duration="{check_interval} seconds"')
+    if config['site_watch']['enable'] is True:
+        for _site in s_stalker.compare_websites():
+            if _site['changed'] is True:
+                s_notifier.notify_user_of_site_change(_site['site_alias'])
+        logger.info(f'audit=site_stalker action=waiting event=still_waiting duration="{check_interval} seconds"')
+    if config['vaccine_watch']['enable'] is True:
+        v_finder.find_vaccine_appointments()
+        if v_finder.available_appointments:
+            s_notifier.notify_user_of_vaccine(v_finder.available_appointments)
     time.sleep(check_interval)

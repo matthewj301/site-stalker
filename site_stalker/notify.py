@@ -26,10 +26,22 @@ class Notifier:
                                from_=self.twilio_phone_number,
                                body=txt)
 
-    def format_notification(self, _site):
+    def format_site_change_notification(self, _site):
         formatted_msg = f'The site {_site} changed from last check. URL: {self.config["sites"][_site]}'
         return formatted_msg
 
+    def format_vaccine_availability_notification(self, vaccine_apt_dict):
+        final_msg_list = list()
+        for _provider, _info in vaccine_apt_dict.items():
+            formatted_msg = f'Appointments Open at {_provider} | ' \
+                            f'# of apts: {_info["available_apts"]} | website: {_info["website"]}'
+            final_msg_list.append(formatted_msg)
+        return '\n'.join(final_msg_list)
+
     def notify_user_of_site_change(self, _site):
-        txt_msg = self.format_notification(_site)
+        txt_msg = self.format_site_change_notification(_site)
         self.send_text_msg(txt_msg)
+
+    def notify_user_of_vaccine(self, vaccine_apt_dict):
+        formatted_sms = self.format_vaccine_availability_notification(vaccine_apt_dict)
+        self.send_text_msg(formatted_sms)

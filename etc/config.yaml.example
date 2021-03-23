@@ -1,13 +1,23 @@
 general:
   check_interval: <interval between checks in seconds>
-  log_level: <log level> OPTIONAL
-  log_dir: <a dir to log to> OPTIONAL (Make sure the running user has access to write to this dir if you set one)
+  log_level: <log level> # OPTIONAL
+  log_dir: <a dir to log to> # OPTIONAL (Make sure the running user has access to write to this dir if you set one)
 
-sites:
-  your_monitor_site_alias: 'url_to_monitor'
+site_watch:
+  enable: True # set to false to only use the vaccine_watch features
+  sites:
+    your_monitor_site_alias: 'url_to_monitor'
 
-  twilio:
-    twilio_phone_number: +1<your_number_here>
-    user_phone_number: +1<your_number_here>
-    account_sid: <account_sid_here>
-    auth_token: <auth_token_here>
+
+vaccine_watch:
+  enable: True # set to false to only use the site_watch features
+  zipcode_only: True # This will limit vaccine results to your zipcode
+  city: <city>
+  state: <state>
+  zip_code: <zip/postal_code>
+
+twilio:
+  twilio_phone_number: +1<your_number_here>
+  user_phone_number: +1<your_number_here>
+  account_sid: <account_sid_here>
+  auth_token: <auth_token_here>

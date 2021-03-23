@@ -13,11 +13,13 @@ class SiteStalker:
         else:
             self.content_dir = self.root_dir.joinpath('content')
         self.config = config
-        self.monitor_dict = {k: v for (k, v) in self.config['sites'].items()}
+        self.monitor_dict = {k: v for (k, v) in self.config['site_watch']['sites'].items()}
         self.headers = {
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36',
             'Pragma': 'no-cache', 'Cache-Control': 'no-cache'
         }
+        self.session = requests.session()
+        self.session.headers = self.headers
 
     def _log(self, _level, msg):
         static_info = 'audit=site_stalker '
@@ -41,7 +43,7 @@ class SiteStalker:
         return str(soup).replace('\r', '')
 
     def get_website(self, _site):
-        response = requests.get(_site, headers=self.headers)
+        response = self.session.get(_site, headers=self.headers)
         if response.status_code < 300:
             self._log('info', f'action=get_website event=website_retrieved website={_site}')
             return response.text
