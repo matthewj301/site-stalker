@@ -1,4 +1,4 @@
-# site_stalker
+# SiteStalker
 
 Project to monitor and alert on a website changing between pulls. Also now a covid-19 vaccine appointment finder. 
 
@@ -22,7 +22,7 @@ Note on running this: Podman or Docker should allow you to run this on any OS, b
 3. On the Twilio webpage, select 'get a trial number', copy this number for later
    
 ## Project Setup
-1. Download this repo somewhere you want to run it with: git clone https://github.com/matthewj301/site_stalker.git
+1. Download this repo somewhere you want to run it with: git clone https://github.com/matthewj301/site-stalker.git
 5. create a file in etc/ called config.yaml, based off of the config.yaml.example file in that same directory
 6. fill in the newly-created config.yaml with:
    - The sites to monitor, can be as many as you want
