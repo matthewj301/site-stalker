@@ -11,7 +11,7 @@ site_watch:
 
 vaccine_watch:
   enable: True # set to false to only use the site_watch features
-  zipcode_only: True # This will limit vaccine results to your zipcode
+  mile_radius: <radius in miles> # Increasing this number will increase the time it takes to cache location information on first run
   city: <city>
   state: <state>
   zip_code: <zip/postal_code>

@@ -1,6 +1,6 @@
 # site_stalker
 
-Project to monitor and alert on a website changing between pulls. Also now a covid-19 vaccine appointment notifier. 
+Project to monitor and alert on a website changing between pulls. Also now a covid-19 vaccine appointment finder. 
 
 Original idea
 from: https://medium.com/swlh/tutorial-creating-a-webpage-monitor-using-python-and-running-it-on-a-raspberry-pi-df763c142dac
@@ -29,8 +29,8 @@ Note on running this: Podman or Docker should allow you to run this on any OS, b
    - Twilio information you saved above including the Twilio-generated phone number
    - Your phone number
    - check_interval, which is the amount of time between checking if a site has changed in seconds
-   - Be careful of setting this too low, a site may block your IP if you make too many of the same requests in a period of time
-   - other fields relating to enabling or disabling certain features or honing in on apts by zipcode instead of city
+      - Be careful of setting this too low, a site may block your IP if you make too many of the same requests in a period of time
+   - other fields relating to enabling or disabling certain features or the radius in miles around your zip to look for vaccine appointments
 
 ## Running The Project
 ### Linux
