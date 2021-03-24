@@ -29,7 +29,9 @@ if 'log_level' in general_config_dict:
 if 'log_dir' in general_config_dict:
     log_file = Path(general_config_dict['log_dir']).joinpath('site_stalker.log')
 
-#logger.remove()
+if log_level != 'DEBUG':
+    logger.remove()
+
 logger.add(log_file, level=log_level, rotation='100 MB', retention='1 week', backtrace=True)
 
 
