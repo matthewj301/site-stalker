@@ -1,7 +1,7 @@
 general:
   check_interval: <interval between checks in seconds>
   log_level: <log level> # OPTIONAL
-  log_dir: <a dir to log to> # OPTIONAL (Make sure the running user has access to write to this dir if you set one)
+  log_dir: <a dir to log to> # OPTIONAL (Make sure the running user has access to write to this dir if you set one, and if you're running this in a container, you'll have to tweak the mounted volume to get it to write to file)
 
 site_watch:
   enable: True # set to false to only use the vaccine_watch features
@@ -12,7 +12,6 @@ site_watch:
 vaccine_watch:
   enable: True # set to false to only use the site_watch features
   mile_radius: <radius in miles> # Increasing this number will increase the time it takes to cache location information on first run
-  city: <city>
   state: <state>
   zip_code: <zip/postal_code>
 

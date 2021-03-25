@@ -58,27 +58,28 @@ class VaccineSpotter:
         cleaned_site_data = list()
         for _data in _json_payload:
             site_properties = _data['properties']
-            if site_properties['city'] is None or site_properties['postal_code'] is None:
+            if site_properties['postal_code'] is None:
                 continue
             cleaned_city = site_properties['city'].lower()
-            if cleaned_city == self.city:
-                vax_site_distance = self.calculate_site_distance_from_user(site_properties['postal_code'])
-                self._log('debug', f'provider="{site_properties["provider_brand_name"].lower()}" vax_site="'
-                                   f'{site_properties["address"].lower()}, Chicago, IL, '
-                                   f'{site_properties["postal_code"]}" distance="{str(vax_site_distance)} miles"')
+            vax_site_distance = self.calculate_site_distance_from_user(site_properties['postal_code'])
+            self._log('debug', f'provider="{site_properties["provider_brand_name"].lower()}" vax_site="'
+                               f'{site_properties["address"].lower()}, {cleaned_city}, {self.state}, '
+                               f'{site_properties["postal_code"]}" distance="{str(vax_site_distance)} miles"')
 
-                if vax_site_distance <= self.acceptable_distance_from_user:
-                    cleaned_site_data.append(
-                        {
-                            'provider_name': site_properties['provider_brand_name'].lower(),
-                            'site_name': site_properties['name'].lower(),
-                            'address': f'{site_properties["address"].lower()}, Chicago, IL, {site_properties["postal_code"]}',
-                            'site_distance': vax_site_distance,
-                            'provider_location_id': site_properties['provider_location_id'],
-                            'url': site_properties['url'],
-                            'appointments': site_properties['appointments']
-                        }
-                    )
+            if vax_site_distance <= self.acceptable_distance_from_user:
+                cleaned_site_data.append(
+                    {
+                        'provider_name': site_properties['provider_brand_name'].lower(),
+                        'site_name': site_properties['name'].lower(),
+                        'address': f'{site_properties["address"].lower()}, '
+                                   f'{cleaned_city}, {self.state},'
+                                   f' {site_properties["postal_code"]}',
+                        'site_distance': vax_site_distance,
+                        'provider_location_id': site_properties['provider_location_id'],
+                        'url': site_properties['url'],
+                        'appointments': site_properties['appointments']
+                    }
+                )
         return cleaned_site_data
 
     def find_vaccine_appointments(self):

@@ -16,6 +16,7 @@ Note on running this: Podman or Docker should allow you to run this on any OS, b
 ## Docker/Podman/Environment
 1. Install podman or docker on your OS
 2. Install git 
+
 ## Twilio
 1. Set up a Twilio account here: https://www.twilio.com/
 2. Find the Twilio account_sid and auth_token in your 'project info' tab, copy this info for later
@@ -34,7 +35,7 @@ Note on running this: Podman or Docker should allow you to run this on any OS, b
 
 ## Running The Project
 ### Linux
-1. On the commandline in the site-stalker directory, run the following command: podman build -t sitestalker-prod . && podman run --name sitestalker --rm --net=host sitestalker-prod:latest
+1. On the commandline in the site-stalker directory, run the following command: podman build -t sitestalker-prod . && podman run --name sitestalker --rm -v $(pwd):/site-stalker --net=host sitestalker-prod:latest
  - This will build the container image and start it up
 2. To stop the container run: podman container stop sitestalker
-3. To update your config, adjust what you need to in config.yaml, stop the container (bulletpoint 2), then run bulletpoint 1 again
+3. To update your config, adjust what you need to in config.yaml, then run: podman restart sitestalker
