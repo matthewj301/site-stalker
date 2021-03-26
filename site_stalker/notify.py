@@ -1,4 +1,5 @@
 from twilio.rest import Client
+from loguru import logger
 
 
 class Notifier:
@@ -9,6 +10,7 @@ class Notifier:
         self.twilio_phone_number = self.clean_phone_number(self.config['twilio']['twilio_phone_number'])
         self.user_phone_number = self.clean_phone_number(self.config['twilio']['user_phone_number'])
 
+    @logger.catch
     def clean_phone_number(self, phone_number):
         phone_number = str(phone_number)
         if isinstance(phone_number, str):
@@ -20,16 +22,19 @@ class Notifier:
                 phone_number = '+' + phone_number
         return phone_number
 
+    @logger.catch
     def send_text_msg(self, txt):
         client = Client(self.twilio_account_sid, self.twilio_auth_token)
         client.messages.create(to=self.user_phone_number,
                                from_=self.twilio_phone_number,
                                body=txt)
 
+    @logger.catch
     def format_site_change_notification(self, _site):
         formatted_msg = f'The site {_site} changed from last check. URL: {self.config["sites"][_site]}'
         return formatted_msg
 
+    @logger.catch
     def format_vaccine_availability_notification(self, vaccine_apt_dict):
         final_msg_list = list()
         for _provider, _info in vaccine_apt_dict.items():
@@ -42,6 +47,8 @@ class Notifier:
         txt_msg = self.format_site_change_notification(_site)
         self.send_text_msg(txt_msg)
 
+    @logger.catch
     def notify_user_of_vaccine(self, vaccine_apt_dict):
         formatted_sms = self.format_vaccine_availability_notification(vaccine_apt_dict)
         self.send_text_msg(formatted_sms)
+        logger.info(f'event=send_text_message action=text_message_sent msg={formatted_sms}')

@@ -34,14 +34,17 @@ class VaccineSpotter:
         static_info = 'audit=site_stalker '
         logger.log(_level.upper(), static_info + msg)
 
+    @logger.catch
     @cached(cache={})
     def calculate_site_distance_from_user(self, vax_site_zip_code):
         vax_site_lat_long = (self.geocoder.geocode(vax_site_zip_code).latitude,
                              self.geocoder.geocode(vax_site_zip_code).longitude)
-        self._log('debug', f'vax_site_lat_long_calculation_result="{str(vax_site_lat_long)}"')
         site_distance = geodesic(self.user_lat_long, vax_site_lat_long).miles
+        self._log('info', f'event=calculating_distance_from_user site_zip={vax_site_zip_code}'
+                          f' vax_site_lat_long_calculation_result="{str(site_distance)} miles"')
         return site_distance
 
+    @logger.catch
     def download_state_vaccine_data(self):
         req = self.session.get(f'{self.vaccine_api_endpoint}/{self.state}.json')
         if req.status_code < 300:
@@ -53,6 +56,7 @@ class VaccineSpotter:
                                f'status_code={req.status_code} text="{req.text}"')
             return {}
 
+    @logger.catch
     def clean_vaccine_data(self, _json_payload):
         cleaned_site_data = list()
         for _data in _json_payload:
@@ -61,9 +65,6 @@ class VaccineSpotter:
                 continue
             cleaned_city = site_properties['city'].lower()
             vax_site_distance = self.calculate_site_distance_from_user(site_properties['postal_code'])
-            self._log('debug', f'provider="{site_properties["provider_brand_name"].lower()}" vax_site="'
-                               f'{site_properties["address"].lower()}, {cleaned_city}, {self.state}, '
-                               f'{site_properties["postal_code"]}" distance="{str(vax_site_distance)} miles"')
 
             if vax_site_distance <= self.acceptable_distance_from_user:
                 cleaned_site_data.append(
@@ -81,6 +82,7 @@ class VaccineSpotter:
                 )
         return cleaned_site_data
 
+    @logger.catch
     def find_vaccine_appointments(self):
         self.available_appointments = dict()
         _site_data = self.clean_vaccine_data(self.download_state_vaccine_data())
