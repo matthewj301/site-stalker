@@ -49,7 +49,6 @@ while True:
         v_finder = VaccineSpotter(config)
         v_finder.find_vaccine_appointments()
         if v_finder.available_appointments:
-            #s_notifier.notify_user_of_vaccine(v_finder.available_appointments)
-            print(v_finder.available_appointments)
+            s_notifier.notify_user_of_vaccine(v_finder.available_appointments)
     logger.info(f'audit=site_stalker action=waiting event=still_waiting duration="{check_interval} seconds"')
     time.sleep(check_interval)
