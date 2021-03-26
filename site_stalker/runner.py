@@ -29,24 +29,24 @@ if 'log_level' in general_config_dict:
 if 'log_dir' in general_config_dict:
     log_file = Path(general_config_dict['log_dir']).joinpath('site_stalker.log')
 
-logger.remove()
+#logger.remove()
 logger.add(log_file, level=log_level, rotation='100 MB', retention='1 week', backtrace=True)
 
 
 check_interval = config['general']['check_interval']
 
 s_notifier = Notifier(config)
+s_stalker = SiteStalker(config)
+v_finder = VaccineSpotter(config)
 
 logger.info('audit=site_stalker action=starting_up event=successfully_loaded_classes')
 
 while True:
     if config['site_watch']['enable'] is True:
-        s_stalker = SiteStalker(config)
         for _site in s_stalker.compare_websites():
             if _site['changed'] is True:
                 s_notifier.notify_user_of_site_change(_site['site_alias'])
     if config['vaccine_watch']['enable'] is True:
-        v_finder = VaccineSpotter(config)
         v_finder.find_vaccine_appointments()
         if v_finder.available_appointments:
             s_notifier.notify_user_of_vaccine(v_finder.available_appointments)
