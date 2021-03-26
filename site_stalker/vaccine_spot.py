@@ -21,7 +21,6 @@ class VaccineSpotter:
         self.vaccine_api_endpoint = 'https://www.vaccinespotter.org/api/v0/states'
         self.config = config['vaccine_watch']
         self.session = requests.session()
-        self.city = self.config['city'].lower()
         self.state = self.config['state'].upper()
         self.zip_code = str(self.config['zip_code'])
         self.geocoder = Nominatim(user_agent='SiteStalker')

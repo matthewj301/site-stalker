@@ -10,7 +10,7 @@ Vaccine Appointment Info from this project's API: https://github.com/GUI/covid-v
 Note on Twilio: it's free to send yourself text messages, but you will be charged for sending texts to other numbers not
 registered to your account.
 
-Note on running this: Podman or Docker should allow you to run this on any OS, but was only tested in Fedora 
+Note on running this: Podman or Docker should allow you to run this on any OS, but was only tested in Fedora and RaspberryPiOS
 
 # Setup Steps
 ## Docker/Podman/Environment
