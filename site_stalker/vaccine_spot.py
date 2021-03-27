@@ -65,21 +65,21 @@ class VaccineSpotter:
                 continue
             cleaned_city = site_properties['city'].lower()
             vax_site_distance = self.calculate_site_distance_from_user(site_properties['postal_code'])
-
-            if vax_site_distance <= self.acceptable_distance_from_user:
-                cleaned_site_data.append(
-                    {
-                        'provider_name': site_properties['provider_brand_name'].lower(),
-                        'site_name': site_properties['name'].lower(),
-                        'address': f'{site_properties["address"].lower()}, '
-                                   f'{cleaned_city}, {self.state},'
-                                   f' {site_properties["postal_code"]}',
-                        'site_distance': vax_site_distance,
-                        'provider_location_id': site_properties['provider_location_id'],
-                        'url': site_properties['url'],
-                        'appointments': site_properties['appointments']
-                    }
-                )
+            if vax_site_distance:
+                if vax_site_distance <= self.acceptable_distance_from_user:
+                    cleaned_site_data.append(
+                        {
+                            'provider_name': site_properties['provider_brand_name'].lower(),
+                            'site_name': site_properties['name'].lower(),
+                            'address': f'{site_properties["address"].lower()}, '
+                                       f'{cleaned_city}, {self.state},'
+                                       f' {site_properties["postal_code"]}',
+                            'site_distance': vax_site_distance,
+                            'provider_location_id': site_properties['provider_location_id'],
+                            'url': site_properties['url'],
+                            'appointments': site_properties['appointments']
+                        }
+                    )
         return cleaned_site_data
 
     @logger.catch
