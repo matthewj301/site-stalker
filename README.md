@@ -36,7 +36,7 @@ Note on running this: Podman or Docker should allow you to run this on any OS, b
 ## Running The Project
 ### Linux
 1. If you find a container image that fits your environment here: https://hub.docker.com/repository/docker/matthewj301/sitestalker
-   1. Run this command to download and start the container: podman run --name sitestalker-<unique_name_if_multiple_being_spun_up> -v /path/to/local/config.yaml:/etc/config.yaml -v /etc/localtime:/etc/localtime:ro --net=host matthewj301/sitestalker:<tag your found>
+   1. Run this command to download and start the container: podman run --name sitestalker-<unique_name_if_multiple_being_spun_up> -v /path/to/local/config.yaml:/etc/config.yaml -v /etc/localtime:/etc/localtime:ro --net=host matthewj301/sitestalker:<tag_you_found>
 2. If you don't find one, do the following
    1. podman build -t sitestalker .
    2. podman run --name sitestalker-<unique_name_if_multiple_being_spun_up> -v /path/to/local/config.yaml:/etc/config.yaml -v /etc/localtime:/etc/localtime:ro --net=host sitestalker
