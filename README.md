@@ -26,7 +26,7 @@ Note on running this: Podman or Docker should allow you to run this on any OS, b
 1. Download this repo somewhere with: git clone https://github.com/matthewj301/site-stalker.git
    - Alternatively, if you can run one of the pre-built container images, just grab the example config in etc/ and edit that
 2. create a file called config.yaml, based off of the config.yaml.example file in the etc/ dir of this project
-   - This can be any saved anywhere, as long as the path won't change, since we will just pass the docker container a path to the config file
+   - This can be saved anywhere, as long as the path won't change, since we will just pass the docker container a path to the config file
 3. fill in the newly-created config.yaml with:
    - The sites to monitor, can be as many as you want
    - Twilio information you saved above including the Twilio-generated phone number
