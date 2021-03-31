@@ -36,6 +36,7 @@ s_stalker = SiteStalker(config)
 v_finder = VaccineSpotter(config)
 
 logger.info('audit=site_stalker action=starting_up event=successfully_loaded_classes')
+s_notifier.send_text_msg('Site Comparison/Vaccine Finder Service has started, linked to this number')
 
 while True:
     if config['site_watch']['enable'] is True:
