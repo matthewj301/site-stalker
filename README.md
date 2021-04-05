@@ -15,7 +15,7 @@ Note on running this: Podman or Docker should allow you to run this on any OS, b
 # Setup Steps
 ## Docker/Podman/Environment
 1. Install podman or docker on your OS
-2. Install git 
+2. Install git (if you need to build the container yourself)
 
 ## Twilio
 1. Set up a Twilio account here: https://www.twilio.com/
@@ -23,11 +23,9 @@ Note on running this: Podman or Docker should allow you to run this on any OS, b
 3. On the Twilio webpage, select 'get a trial number', copy this number for later
    
 ## Project Setup
-1. Download this repo somewhere with: git clone https://github.com/matthewj301/site-stalker.git
-   - Alternatively, if you can run one of the pre-built container images, just grab the example config in etc/ and edit that
-2. create a file called config.yaml, based off of the config.yaml.example file in the etc/ dir of this project
+1. Download and edit this config file, name it config.yaml https://github.com/matthewj301/site-stalker/blob/main/etc/config.yaml.example
    - This can be saved anywhere, as long as the path won't change, since we will just pass the docker container a path to the config file
-3. fill in the newly-created config.yaml with:
+2. fill in the newly-created config.yaml with:
    - The sites to monitor, can be as many as you want
    - Twilio information you saved above including the Twilio-generated phone number
    - Your phone number
@@ -37,7 +35,7 @@ Note on running this: Podman or Docker should allow you to run this on any OS, b
 
 ## Running The Project
 ### Linux
-1. If you find a container image that fits your environment here: https://hub.docker.com/repository/docker/matthewj301/sitestalker
+1. the docker container (hosted at https://hub.docker.com/repository/docker/matthewj301/sitestalker) with the 'latest' tag supports linux/amd64, linux/arm64, linux/arm/v6, and linux/arm/v7
    1. Run this command to download and start the container: podman run --name sitestalker-<unique_name_if_multiple_being_spun_up> -v /path/to/local/config.yaml:/etc/config.yaml -v /etc/localtime:/etc/localtime:ro --net=host matthewj301/sitestalker:<tag_you_found>
      - Note: if you are not running this in Linux, you may have to adjust the '-v /etc/localtime:/etc/localtime:ro' portion of the run command, or you can just remove it if you don't care about the logs being in your local timezone
 2. If you don't find one, do the following
