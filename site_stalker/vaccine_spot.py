@@ -86,15 +86,23 @@ class VaccineSpotter:
     def find_vaccine_appointments(self):
         self.available_appointments = dict()
         _site_data = self.clean_vaccine_data(self.download_state_vaccine_data())
-        for _site in _site_data:
-            if _site['appointments']:
-                self._log('success', f'action=look_for_appointments event=appointments_found '
-                                     f'provider={_site["provider_name"]} address="{_site["address"]}" '
-                                     f'distance={_site["site_distance"]}')
-                if _site['provider_name'] not in self.available_appointments:
-                    self.available_appointments[_site['provider_name']] = {'available_apts': len(_site['appointments']),
-                                                                           'website': _site['url']}
-                else:
-                    self.available_appointments[_site['provider_name']]['available_apts'] += len(_site['appointments'])
+        if _site_data:
+            for _site in _site_data:
+                self.find_vaccine_appointment(_site)
+        else:
+            self._log('error', f'action=look_for_appointments event=site_data_download_empty '
+                               f'reason=connection_reset_or_no_vaccine_locations_in_mile_radius ')
         if not self.available_appointments:
             self._log('warning', f'action=look_for_appointments event=appointments_not_found ')
+
+    @logger.catch
+    def find_vaccine_appointment(self, vax_site):
+        if vax_site['appointments']:
+            self._log('success', f'action=look_for_appointments event=appointments_found '
+                                 f'provider={vax_site["provider_name"]} address="{vax_site["address"]}" '
+                                 f'distance={vax_site["site_distance"]}')
+            if vax_site['provider_name'] not in self.available_appointments:
+                self.available_appointments[vax_site['provider_name']] = {'available_apts': len(vax_site['appointments']),
+                                                                       'website': vax_site['url']}
+            else:
+                self.available_appointments[vax_site['provider_name']]['available_apts'] += len(vax_site['appointments'])
