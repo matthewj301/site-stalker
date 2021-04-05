@@ -35,8 +35,8 @@ Note on running this: Podman or Docker should allow you to run this on any OS, b
 
 ## Running The Project
 ### Linux
-1. the docker container (hosted at https://hub.docker.com/repository/docker/matthewj301/sitestalker) with the 'latest' tag supports linux/amd64, linux/arm64, linux/arm/v6, and linux/arm/v7
-   1. Run this command to download and start the container: podman run --name sitestalker-<unique_name_if_multiple_being_spun_up> -v /path/to/local/config.yaml:/etc/config.yaml -v /etc/localtime:/etc/localtime:ro --net=host matthewj301/sitestalker:<tag_you_found>
+1. the docker image (hosted at https://hub.docker.com/repository/docker/matthewj301/sitestalker) with the 'latest' tag supports linux/amd64, linux/arm64, linux/arm/v6, and linux/arm/v7
+   1. Run this command to download the image and start the container: podman run --name sitestalker-<unique_name_if_multiple_being_spun_up> -v /path/to/local/config.yaml:/etc/config.yaml -v /etc/localtime:/etc/localtime:ro --net=host matthewj301/sitestalker:<tag_you_found>
      - Note: if you are not running this in Linux, you may have to adjust the '-v /etc/localtime:/etc/localtime:ro' portion of the run command, or you can just remove it if you don't care about the logs being in your local timezone
 2. If you don't find one, do the following
    1. podman build -t sitestalker .
