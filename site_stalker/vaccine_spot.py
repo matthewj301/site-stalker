@@ -5,7 +5,7 @@ from loguru import logger
 from geopy.geocoders import Nominatim
 from geopy.distance import geodesic
 
-from state_abbreviations import us_state_abbrev
+from site_stalker.state_abbreviations import us_state_abbrev
 
 from cachetools import cached
 
@@ -37,11 +37,18 @@ class VaccineSpotter:
     @logger.catch
     @cached(cache={})
     def calculate_site_distance_from_user(self, vax_site_zip_code):
-        vax_site_lat_long = (self.geocoder.geocode(vax_site_zip_code).latitude,
-                             self.geocoder.geocode(vax_site_zip_code).longitude)
-        site_distance = geodesic(self.user_lat_long, vax_site_lat_long).miles
-        self._log('info', f'event=calculating_distance_from_user site_zip={vax_site_zip_code}'
-                          f' vax_site_lat_long_calculation_result="{str(site_distance)} miles"')
+        try:
+            vax_site_lat_long = (self.geocoder.geocode(vax_site_zip_code).latitude,
+                                 self.geocoder.geocode(vax_site_zip_code).longitude)
+            site_distance = geodesic(self.user_lat_long, vax_site_lat_long).miles
+            self._log('info', f'event=calculating_distance_from_user site_zip={vax_site_zip_code} '
+                              f'action=calculation_successful '
+                              f'vax_site_lat_long_calculation_result="{str(site_distance)} miles"')
+        except Exception as e:
+            self._log('error', f'event=calculating_distance_from_user site_zip={vax_site_zip_code} '
+                               f'action=calculation_not_successful reason={e}'
+                              f' vax_site_lat_long_calculation_result="None"')
+            return None
         return site_distance
 
     @logger.catch
@@ -56,7 +63,6 @@ class VaccineSpotter:
                                f'status_code={req.status_code} text="{req.text}"')
             return {}
 
-    @logger.catch
     def clean_vaccine_data(self, _json_payload):
         cleaned_site_data = list()
         for _data in _json_payload:
@@ -65,8 +71,8 @@ class VaccineSpotter:
                 continue
             cleaned_city = site_properties['city'].lower()
             vax_site_distance = self.calculate_site_distance_from_user(site_properties['postal_code'])
-            if vax_site_distance:
-                if vax_site_distance <= self.acceptable_distance_from_user:
+            if vax_site_distance is not None:
+                if vax_site_distance <= int(self.acceptable_distance_from_user):
                     cleaned_site_data.append(
                         {
                             'provider_name': site_properties['provider_brand_name'].lower(),
@@ -104,5 +110,8 @@ class VaccineSpotter:
             if vax_site['provider_name'] not in self.available_appointments:
                 self.available_appointments[vax_site['provider_name']] = {'available_apts': len(vax_site['appointments']),
                                                                        'website': vax_site['url']}
+                return True
             else:
                 self.available_appointments[vax_site['provider_name']]['available_apts'] += len(vax_site['appointments'])
+                return True
+        return False
