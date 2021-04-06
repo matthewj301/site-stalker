@@ -41,10 +41,16 @@ logger.info(f'audit=site_stalker action=notify_user_of_service_start event=text_
 
 while True:
     if config['site_watch']['enable'] is True:
+        logger.info(f'audit=site_stalker event=site_stalking started action=beginning_processing '
+                    f'monitoring_list="{s_stalker.monitor_dict}" ')
         for _site in s_stalker.compare_websites():
             if _site['changed'] is True:
                 s_notifier.notify_user_of_site_change(_site['site_alias'])
     if config['vaccine_watch']['enable'] is True:
+        logger.info(f'audit=site_stalker event=vaccine_search_started action=beginning_search '
+                    f'state={v_finder.state} '
+                    f'zip_code={v_finder.zip_code} '
+                    f'mile_radius={v_finder.acceptable_distance_from_user}')
         v_finder.find_vaccine_appointments()
         if v_finder.available_appointments:
             s_notifier.notify_user_of_vaccine(v_finder.available_appointments)

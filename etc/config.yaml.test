@@ -1,0 +1,20 @@
+general:
+  check_interval: 320
+  log_level: info
+
+site_watch:
+  enable: True
+  sites:
+    zocdoc: 'https://www.zocdoc.com/vaccine/search/IL?flavor=state-search'
+
+vaccine_watch:
+  enable: True
+  mile_radius: 15
+  state: IL
+  zip_code: 61401
+
+twilio:
+  twilio_phone_number: +12223334444
+  user_phone_number: +12223335555
+  account_sid: an_account_sid
+  auth_token: an_account_token
