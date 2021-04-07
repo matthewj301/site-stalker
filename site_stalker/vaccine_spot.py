@@ -24,8 +24,12 @@ class VaccineSpotter:
         self.state = self.config['state'].upper()
         self.zip_code = str(self.config['zip_code'])
         self.geocoder = Nominatim(user_agent='SiteStalker')
-        self.user_lat_long = (self.geocoder.geocode(self.zip_code).latitude,
-                              self.geocoder.geocode(self.zip_code).longitude)
+        self.user_location = self.geocoder.geocode(self.zip_code, country_codes=['US'])
+        self.user_lat_long = (self.user_location.latitude,
+                              self.user_location.longitude)
+        self._log('info', f'event=initializing_user_location user_zip_code={self.zip_code} '
+                          f'location={self.user_location} '
+                          f'lat_long={self.user_lat_long}')
         self.acceptable_distance_from_user = self.config['mile_radius']
         if len(self.state) > 2:
             self.state = us_state_abbrev[self.state.lower()]
@@ -38,10 +42,13 @@ class VaccineSpotter:
     @cached(cache={})
     def calculate_site_distance_from_user(self, vax_site_zip_code):
         try:
-            vax_site_lat_long = (self.geocoder.geocode(vax_site_zip_code).latitude,
-                                 self.geocoder.geocode(vax_site_zip_code).longitude)
+            vax_site_location = self.geocoder.geocode(vax_site_zip_code, country_codes=['US'])
+            vax_site_lat_long = (vax_site_location.latitude,
+                                 vax_site_location.longitude)
             site_distance = geodesic(self.user_lat_long, vax_site_lat_long).miles
             self._log('info', f'event=calculating_distance_from_user site_zip={vax_site_zip_code} '
+                              f'location={vax_site_location} '
+                              f'lat_long={vax_site_lat_long} '
                               f'action=calculation_successful '
                               f'vax_site_lat_long_calculation_result="{str(site_distance)} miles"')
         except Exception as e:
