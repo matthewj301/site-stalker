@@ -85,8 +85,8 @@ def site_stalker_init():
     return SiteStalker(config)
 
 
-# def test_vaccine_spotter_api_return(vaccine_finder_init):
-#    assert bool(vaccine_finder_init.download_state_vaccine_data()) is True
+def test_vaccine_spotter_api_return(vaccine_finder_init):
+    assert bool(vaccine_finder_init.download_state_vaccine_data()) is True
 
 
 def test_cleaning_api_data(vaccine_finder_init):
